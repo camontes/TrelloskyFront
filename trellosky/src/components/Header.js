@@ -1,11 +1,20 @@
 import React from "react";
+import {Navbar, NavbarBrand} from 'reactstrap';
 
 const Header = () => {
 
     return(
-        <div>
-            Header
-        </div>
+        <>
+        <Navbar
+                className="my-2"
+                color="info"
+                dark
+            >
+                <NavbarBrand href="/">
+                    Trellosky
+                </NavbarBrand>
+        </Navbar>
+        </>
     );
 }
 
