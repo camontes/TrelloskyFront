@@ -19,9 +19,10 @@ const TaskContainer = () => {
         fetchTasks();
     },[])
 
-    const randomNumer = () => {
+    const randomNumber = () => {
         return Math.floor(Math.random() * 255);
     }
+
     const getTasksFromType = (type) => {
 
         const tasksFilter = tasks.filter(x => x.typeTaskId === type)
@@ -35,7 +36,6 @@ const TaskContainer = () => {
             const newTask = {id:0, description:description, typeTaskId:type}
 
             const newTaskBack = await trello.post('/CreateTask',{...newTask});
-            console.log(newTaskBack);
 
             const tasksCreted = [
                 ...tasks,
@@ -48,19 +48,38 @@ const TaskContainer = () => {
         createTask();
     }
 
+    const editTaskById = (task, description) => {
+        const editedTask = {id:task.id, description:description, typeTaskId: task.typeTaskId};
+
+        const editTask = async() => {
+            const editedTaskBack = await trello.put('/UpdateTask',{...editedTask});
+
+            const editedTasks = tasks.map(t => {
+                if(t.id === task.id){
+                    return {...t, description: editedTaskBack.data.description}
+                }
+
+                return t;
+            });
+
+            setTasks(editedTasks);
+        }
+        editTask();
+    }
+
     const renderTaskList = typeTasks.map((type) => {
         return(
             <div className="col-md-3 col-s-4 col-xs-8" key={type.Id}>
                 <Card>
-                    <CardHeader style={{backgroundColor:`rgb(${randomNumer()}, ${randomNumer()}, ${randomNumer()})`,color:'white'}}>
+                    <CardHeader style={{backgroundColor:`rgb(${randomNumber()}, ${randomNumber()}, ${randomNumber()})`,color:'white'}}>
                         {type.Description}
                     </CardHeader>
                     <CardBody>
                         <CardText>
-                            <TaskList tasks = {getTasksFromType(type.Id)}/>
+                            <TaskList tasks = {getTasksFromType(type.Id)} onEdit={editTaskById}/>
                         </CardText>
                     </CardBody>
-                    <CardFooter style={{backgroundColor:`rgb(${randomNumer()}, ${randomNumer()}, ${randomNumer()})`}}>
+                    <CardFooter style={{backgroundColor:`rgb(${randomNumber()}, ${randomNumber()}, ${randomNumber()})`}}>
                         <TaskCreate type = {type.Id} onCrete={handleSubmit}/>
                     </CardFooter>
                 </Card>
