@@ -29,6 +29,25 @@ const TaskContainer = () => {
         return tasksFilter;
     }
 
+    const handleSubmit = (description, type) => {
+
+        const createTask = async() => {
+            const newTask = {id:0, description:description, typeTaskId:type}
+
+            const newTaskBack = await trello.post('/CreateTask',{...newTask});
+            console.log(newTaskBack);
+
+            const tasksCreted = [
+                ...tasks,
+                newTaskBack.data
+            ];
+
+            setTasks(tasksCreted);
+        }
+
+        createTask();
+    }
+
     const renderTaskList = typeTasks.map((type) => {
         return(
             <div className="col-md-3 col-s-4 col-xs-8" key={type.Id}>
@@ -42,7 +61,7 @@ const TaskContainer = () => {
                         </CardText>
                     </CardBody>
                     <CardFooter style={{backgroundColor:`rgb(${randomNumer()}, ${randomNumer()}, ${randomNumer()})`}}>
-                        <TaskCreate type = {type.Id}/>
+                        <TaskCreate type = {type.Id} onCrete={handleSubmit}/>
                     </CardFooter>
                 </Card>
             </div>

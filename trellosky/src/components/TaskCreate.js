@@ -1,10 +1,21 @@
-import React from "react";
+import { useState } from "react";
 
-const TaskCreate = ({type}) => {
+const TaskCreate = ({type, onCrete}) => {
 
-    console.log(type);
+    const[term, setTerm] = useState('');
+
+    const handleSubmit = (e) =>{
+        e.preventDefault();
+        onCrete(term, type);
+        setTerm('');
+
+    }
     return (
-        <input type="text" className="form-control" placeholder="Enter a task"/>
+        <>
+        <form onSubmit={handleSubmit}>
+        <input type="text" value={term} className="form-control" placeholder="Enter a task" onChange={(e) => setTerm(e.target.value)}/>
+        </form>
+        </>
     );
 }
 
