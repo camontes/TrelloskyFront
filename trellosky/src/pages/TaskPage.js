@@ -4,7 +4,9 @@ import TaskContainer from "../containers/TaskContainer";
 const TaskPage = () => {
 
     return(
-        <TaskContainer />
+        <div className="container">
+            <TaskContainer />
+        </div>
     );
 }
 
