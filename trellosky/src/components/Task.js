@@ -3,7 +3,7 @@ import TaskEdit from "./TaskEdit";
 import { BsXCircleFill, BsFillChatSquareTextFill } from 'react-icons/bs';
 import  '../trellosky.css'
 
-const Task = ({task, onEdit}) => {
+const Task = ({task, onEdit, onDelete}) => {
     const [isEditing, setisEditing] = useState(false);
 
 
@@ -20,7 +20,7 @@ const Task = ({task, onEdit}) => {
             return(
                 <>
                     <div style={{float:'right'}}>
-                        <BsXCircleFill className="iconsDU"/>
+                        <BsXCircleFill className="iconsDU" onClick={() => onDelete(task.id)}/>
                         <BsFillChatSquareTextFill className="iconsDU" onClick={() => setisEditing(true)}/>
                     </div>
                     <div>

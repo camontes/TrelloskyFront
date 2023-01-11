@@ -4,6 +4,7 @@ import TaskList from "../components/TaskList";
 import { typeTasks } from "../utils/typeTasks.js";
 import TaskCreate from "../components/TaskCreate.js";
 import { Card, CardText, CardFooter,CardHeader,CardBody} from "reactstrap";
+import Swal from 'sweetalert2'
 
 const TaskContainer = () => {
 
@@ -67,6 +68,40 @@ const TaskContainer = () => {
         editTask();
     }
 
+    const deleteTaskById = (id) =>{
+
+        const deleteTask = async() => {
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: 'btn btn-success',
+                  cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+              })
+              
+              swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+              }).then(async(result) => {
+                if (result.isConfirmed) {
+                    const idTaskBack = await trello.delete(`/DeleteTask/${id}`);
+                    const tasksUpdated = tasks.filter(x => x.id !== idTaskBack.data);
+
+                    setTasks(tasksUpdated);
+                }
+              })
+        }
+
+        deleteTask();
+
+    }
+
     const renderTaskList = typeTasks.map((type) => {
         return(
             <div className="col-md-3 col-s-4 col-xs-8" key={type.Id}>
@@ -76,7 +111,7 @@ const TaskContainer = () => {
                     </CardHeader>
                     <CardBody>
                         <CardText>
-                            <TaskList tasks = {getTasksFromType(type.Id)} onEdit={editTaskById}/>
+                            <TaskList tasks = {getTasksFromType(type.Id)} onEdit={editTaskById} onDelete = {deleteTaskById}/>
                         </CardText>
                     </CardBody>
                     <CardFooter style={{backgroundColor:`rgb(${randomNumber()}, ${randomNumber()}, ${randomNumber()})`}}>
