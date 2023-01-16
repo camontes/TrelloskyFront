@@ -74,7 +74,7 @@ const TaskContainer = () => {
 
             const editedTasks = tasks.map(t => {
                 if(t.id === task.id){
-                    return {...t, description: editedTaskBack.data.description}
+                    return {...t, ...editedTaskBack.data}
                 }
 
                 return t;
