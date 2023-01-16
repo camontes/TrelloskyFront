@@ -5,6 +5,7 @@ import { typeTasks } from "../utils/typeTasks.js";
 import TaskCreate from "../components/TaskCreate.js";
 import { Card, CardText, CardFooter,CardHeader,CardBody} from "reactstrap";
 import Swal from 'sweetalert2'
+import { next} from "../utils/typeTasks.js";
 
 const TaskContainer = () => {
 
@@ -29,6 +30,22 @@ const TaskContainer = () => {
         const tasksFilter = tasks.filter(x => x.typeTaskId === type)
 
         return tasksFilter;
+    }
+
+    const handleClickChangeTypeTask = (id, action, typeTask) => {
+
+        const newTypeTask = action === next? (typeTask + 1) : (typeTask - 1);
+        
+        const updatedTasks = tasks.map((task) => {
+
+            if(task.id === id){
+                return {...task, typeTaskId: newTypeTask}
+            }
+
+            return task;
+        });
+
+        setTasks(updatedTasks);
     }
 
     const handleSubmit = (description, type) => {
@@ -111,7 +128,7 @@ const TaskContainer = () => {
                     </CardHeader>
                     <CardBody>
                         <CardText>
-                            <TaskList tasks = {getTasksFromType(type.Id)} onEdit={editTaskById} onDelete = {deleteTaskById}/>
+                            <TaskList tasks = {getTasksFromType(type.Id)} onEdit={editTaskById} onDelete = {deleteTaskById} handleClickChangeTypeTask= {handleClickChangeTypeTask}/>
                         </CardText>
                     </CardBody>
                     <CardFooter style={{backgroundColor:`rgb(${randomNumber()}, ${randomNumber()}, ${randomNumber()})`}}>
